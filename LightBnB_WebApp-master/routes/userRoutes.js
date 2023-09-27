@@ -4,6 +4,9 @@ const database = require("../db/database");
 
 const router = express.Router();
 
+
+
+
 // Create a new user
 router.post("/", (req, res) => {
   const user = req.body;
@@ -21,7 +24,9 @@ router.post("/", (req, res) => {
     .catch((e) => res.send(e));
 });
 
-// Log a user in
+
+
+// Log a user in///
 router.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -46,11 +51,15 @@ router.post("/login", (req, res) => {
   });
 });
 
+
+
 // Log a user out
 router.post("/logout", (req, res) => {
   req.session.userId = null;
   res.send({});
 });
+
+
 
 // Return information about the current user (based on cookie value)
 router.get("/me", (req, res) => {
@@ -76,5 +85,7 @@ router.get("/me", (req, res) => {
     })
     .catch((e) => res.send(e));
 });
+
+
 
 module.exports = router;
