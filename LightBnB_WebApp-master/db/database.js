@@ -36,6 +36,7 @@ const getUserWithEmail = function (email) {
     })
     .catch((err) => {
       console.log(err.message);
+      return null
     });
 };
 
@@ -53,8 +54,8 @@ const getUserWithId = function(id) {
   WHERE id = $1
   `, [id])
   .then((result) => {
-    console.log(result.rows)
-    return result.rows
+    console.log(result.rows[0])
+    return result.rows[0]
   })
   .catch((error) => {
     console.log (err.message)
