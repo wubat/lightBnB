@@ -97,16 +97,31 @@ const addUser = function(userObj) {
 //   return Promise.resolve(user);
 // };
 
-/// Reservations
 
+
+
+/// Reservations
 /**
  * Get all reservations for a single user.
  * @param {string} guest_id The id of the user.
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function (guest_id, limit = 10) {
-  return getAllProperties(null, 2);
+  // return getAllProperties(null, 2);
+  return pool 
+    .query(`
+    SELECT *
+    FROM properties 
+    JOIN reservations ON property_id = properties.id
+    WHERE guest_id = $1
+    LIMIT $2
+    `, [guest_id, limit])
+    .then(res => res.rows)
+    .catch(err => console.log(err.message))
+
 };
+
+
 
 /// Properties
 
@@ -117,7 +132,6 @@ const getAllReservations = function (guest_id, limit = 10) {
  * @return {Promise<[{}]>}  A promise to the properties.
  */
 
-/////////////////////////////////////////////////////////////////
 const getAllProperties = function (options, limit = 10) {
   return pool
     .query(`SELECT * FROM properties LIMIT $1`, [limit])
@@ -129,7 +143,6 @@ const getAllProperties = function (options, limit = 10) {
       console.log(err.message);
     });
 };
-//////////////////////////////////////////////////////////////////////
 
 
 /**
