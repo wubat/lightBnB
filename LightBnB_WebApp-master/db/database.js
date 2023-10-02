@@ -133,7 +133,8 @@ const getAllReservations = function (guest_id, limit = 10) {
  */
 /////////////////////////////////////////////////////////
 const getAllProperties = function (options, limit = 10) {
-  let queryParams = []
+  const queryParams = []
+  
   let queryString = `
   SELECT properties.*, avg(property_reviews.rating) as average_rating
   FROM properties
@@ -181,6 +182,7 @@ const getAllProperties = function (options, limit = 10) {
       WHERE properties.cost_per_night <= $${queryParams.length}
       `
     }
+  }
 
   if (options.minimum_rating) {
     queryParams.push(options.minimum_rating, limit)
@@ -192,6 +194,8 @@ const getAllProperties = function (options, limit = 10) {
     LIMIT $${queryParams.length}
     `
   } else {
+    queryParams.push(limit)
+
     queryString += `
     GROUP BY properties.id
     ORDER BY cost_per_night
@@ -199,13 +203,14 @@ const getAllProperties = function (options, limit = 10) {
     `
   }
 
+  console.log(queryString, queryParams)
+
   return pool
     .query(queryString, queryParams)
     .then(res => res.rows)
     .catch(err => console.log(err.message))
 
-  
-}};
+};
 //////////////////////////////////////////////////////////////
 
 /**
